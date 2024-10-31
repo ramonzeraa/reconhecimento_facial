@@ -49,6 +49,7 @@
             font-weight: bold;
         }
     </style>
+
 </head>
 
 <body>
@@ -61,27 +62,20 @@
     </div>
 
     <script>
-        function registrarRosto() {
-            const nome = document.getElementById('nome').value;
-            fetch('/registrar_rosto', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `nome=${nome}`
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('response').innerText = data.message;
-                });
-        }
-
         function verificarAcesso() {
             fetch('/verificar_acesso', {
                 method: 'POST'
             })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('response').innerText = data.message;
-                });
+                    if (data.status === "authorized") {
+                        // Redirecionar para a página autorizada
+                        window.location.href = "/pagina_autorizada";
+                    } else {
+                        alert(data.message);  // Exibir mensagem de acesso negado
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
         }
     </script>
 </body>

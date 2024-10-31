@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, url_for
 import cv2
 import mediapipe as mp
 import face_recognition
@@ -90,15 +90,15 @@ def verificar_acesso():
                 resultados = face_recognition.compare_faces(rostos_conhecidos, codificacao_frame[0])
                 if any(resultados):
                     indice = resultados.index(True)
-                    return jsonify({"status": "authorized", "message": f"Acesso autorizado para {nomes_conhecidos[indice]}"} )
+                    # Enviar resposta JSON indicando que o acesso foi autorizado
+                    return jsonify({"status": "authorized", "message": f"Acesso autorizado para {nomes_conhecidos[indice]}"})
                 else:
                     return jsonify({"status": "denied", "message": "Você não está autorizado a entrar nesse site"})
     return jsonify({"status": "denied", "message": "Você não está autorizado a entrar nesse site"})
 
 @app.route('/pagina_autorizada')
 def pagina_autorizada():
-    usuario = request.args.get('usuario', 'Usuário')
-    return render_template("pagina_autorizada.html", usuario=usuario)
+    return render_template("pagina_autorizada.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
